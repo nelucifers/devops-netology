@@ -85,8 +85,8 @@ provider "virtualbox" {
 }
 
 resource "virtualbox_vm" "vm1" {
-  name   = "freebsd"
-  image  = "http://dlang.dawg.eu/vagrant/FreeBSD-8.4-amd64.box"
+  name   = "centos-6.4.2"
+  image  = "https://github.com/2creatives/vagrant-centos/releases/download/v6.4.2/centos64-x86_64-20140116.box"
   cpus   = 1
   memory    = "512 mib"
 
