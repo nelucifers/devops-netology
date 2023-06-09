@@ -70,29 +70,10 @@ shekeriev.
 2. Создайте с его помощью любую виртуальную машину. Чтобы не использовать VPN советуем выбрать любой образ с расположением в github из [**списка**](https://www.vagrantbox.es/)
 
 ```
-terraform {
-  required_providers {
-    virtualbox = {
-      source = "shekeriev/virtualbox"
-      version = "0.0.4"
-    }
-  }
-}
+virtualbox_vm.vm1: Refreshing state... [id=960c1a08-5a10-48d6-ab3a-e6195b9642fd]
 
-provider "virtualbox" {
-  delay      = 60
-  mintimeout = 5
-}
+No changes. Your infrastructure matches the configuration.
 
-resource "virtualbox_vm" "vm1" {
-  name   = "centos-6.4.2"
-  image  = "https://github.com/2creatives/vagrant-centos/releases/download/v6.4.2/centos64-x86_64-20140116.box"
-  cpus   = 1
-  memory    = "512 mib"
-
-  network_adapter {
-    type           = "hostonly"
-    host_interface = "VirtualBox Host-Only Ethernet Adapter"
-  }
-}
+Terraform has compared your real infrastructure against your configuration and found no differences, so no changes are needed.
 ```
+![z1_v5_virtualbox_vm](img/z1_v5_virtualbox_vm.jpg "z1_v5_virtualbox_vm")
