@@ -24,7 +24,6 @@ resource "yandex_compute_instance" "vms" {
 
   network_interface {
     subnet_id          = yandex_vpc_subnet.develop.id
-#    nat                = true
   }
 
   metadata = {
