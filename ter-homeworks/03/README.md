@@ -72,6 +72,8 @@
 
 ![z4_hosts.cfg](img/z4_hosts.cfg.jpg "z4_hosts.cfg")
 
+[Ветка terraform-03](https://github.com/nelucifers/devops-netology/tree/terraform-03/ter-homeworks/03/src)
+
 
 ### Задание 5*(необязательное)
 1. Напишите output, который отобразит все 5 созданных ВМ в виде списка словарей:
@@ -106,6 +108,8 @@
 
 Для проверки работы уберите у ВМ внешние адреса. Этот вариант используется при работе через bastion сервер.
 Для зачета предоставьте код вместе с основной частью задания.
+
+[Код](https://github.com/nelucifers/devops-netology/tree/terraform-03/ter-homeworks/03/src)
 
 
 ### Правила приема работы

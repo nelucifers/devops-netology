@@ -1,4 +1,7 @@
 resource "yandex_compute_instance" "vms" {
+  
+  depends_on = [yandex_compute_instance.web]
+
   for_each = {
     for index, vm in var.vms:
     vm.vm_name => vm
@@ -28,8 +31,6 @@ resource "yandex_compute_instance" "vms" {
     serial-port-enable = local.metadata.serial-port-enable
     ssh-keys           = local.metadata.ssh-keys
   }
-
-  depends_on = [yandex_compute_instance.web]
 
   scheduling_policy {
     preemptible = true
