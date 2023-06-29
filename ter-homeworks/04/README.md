@@ -26,6 +26,8 @@
 
 ![zz1_nginx](img/z1_nginx.jpg "z1_nginx")
 
+[Код](src/demonstration1)
+
 ------
 
 ### Задание 2
@@ -177,6 +179,8 @@ No changes. Your infrastructure matches the configuration.
 Terraform has compared your real infrastructure against your configuration and found no differences, so no changes are needed.
 ```
 
+[Код модуля vpc](src/demonstration1/vpc)
+
 
 ## Дополнительные задания (со звездочкой*)
 
@@ -211,98 +215,7 @@ module "vpc_dev" {
 
 Предоставьте код, план выполнения, результат из консоли YC.
 
-```
-user@server-ubuntu2204:~/ter-homeworks/04/demonstration1$ cat vpc/main.tf                                                                              
-terraform {
-  required_providers {
-    yandex = {
-      source = "yandex-cloud/yandex"
-    }
-  }
-  required_version = ">=0.13"
-}
-
-
-resource "yandex_vpc_network" "develop" {
-  name = "${var.env_name}"
-}
-
-resource "yandex_vpc_subnet" "develop" {
-  for_each = {
-    for k,v in var.subnets :
-      v.zone => v
-  }
-  name           = "develop-${each.value.zone}"
-  zone           = "${each.value.zone}"
-  network_id     = yandex_vpc_network.develop.id
-  v4_cidr_blocks = ["${each.value.cidr}"]
-}
-
-user@server-ubuntu2204:~/ter-homeworks/04/demonstration1$ cat vpc/output.tf 
-output "vpc_id" {
-  value = yandex_vpc_network.develop.id
-}
-
-output "subnet_ids" {
-  value = { for k, v in yandex_vpc_subnet.develop : v.zone => v.id }
-}
-
-user@server-ubuntu2204:~/ter-homeworks/04/demonstration1$ cat main.tf
-terraform {
-  required_providers {
-    yandex = {
-      source = "yandex-cloud/yandex"
-    }
-  }
-  required_version = ">=0.13"
-}
-
-provider "yandex" {
-  token     = var.token
-  cloud_id  = var.cloud_id
-  folder_id = var.folder_id
-}
-
-module "vpc_dev" {
-  source       = "./vpc"
-  env_name     = var.env_name
-  subnets = [
-    { zone = "ru-central1-a", cidr = "10.0.1.0/24" },
-    { zone = "ru-central1-b", cidr = "10.0.2.0/24" },
-    { zone = "ru-central1-c", cidr = "10.0.3.0/24" },
-  ]
-  token        = var.token
-  cloud_id     = var.cloud_id
-  folder_id    = var.folder_id
-}
-
-module "test-vm" {
-  source          = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
-  env_name        = var.env_name
-  network_id      = module.vpc_dev.vpc_id
-  subnet_zones    = [ var.default_zone ]
-  subnet_ids      = [ module.vpc_dev.subnet_ids["${var.default_zone}"] ]
-  instance_name   = var.instance_name
-  instance_count  = var.instance_count
-  image_family    = var.image_family
-  public_ip       = var.public_ip
-
-  metadata = {
-      user-data          = data.template_file.cloudinit.rendered #Для демонстрации №3
-      serial-port-enable = 1
-  }
-
-}
-
-#Пример передачи cloud-config в ВМ для демонстрации №3
-data "template_file" "cloudinit" {
- template = file("./cloud-init.yml")
-
-  vars = {
-    ssh_public_key = file(var.public_key)
-  }
-}
-```
+[Код модуля vpc](src/demonstration1/vpc)
 
 ```
 user@server-ubuntu2204:~/ter-homeworks/04/demonstration1$ terraform plan
@@ -736,6 +649,7 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 
 ![z5_yc_cluster_users](img/z5_yc_cluster_users.jpg "z5_yc_cluster_users")
 
+[Код модуля mysql-cluster](src/mysql-cluster)
 
 
 ### Задание 6*
@@ -764,6 +678,9 @@ output "vault_example" {
 можно обратится не к словарю, а конкретному ключу.
 terraform console: >nonsensitive(data.vault_generic_secret.vault_example.data.<имя ключа в секрете>)
 ```
+
+![z6_vault_output](img/z6_vault_output.jpg "z6_vault_output")
+
 5. Попробуйте самостоятельно разобраться в документации и записать новый секрет в vault с помощью terraform. 
 
 
@@ -802,6 +719,7 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 
 ![z6_vault_secret](img/z6_vault_secret.jpg "z6_vault_secret")
 
+[Код vault](src/vault)
 
 ### Правила приема работы
 
