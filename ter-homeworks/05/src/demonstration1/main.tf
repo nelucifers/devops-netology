@@ -1,10 +1,14 @@
 terraform {
   required_providers {
     yandex = {
-      source = "yandex-cloud/yandex"
+      source  = "yandex-cloud/yandex"
+      version = ">=0.92.0"
+    }
+    template = {
+      version = ">=2.2.0"
     }
   }
-  required_version = ">=0.13"
+  required_version   = ">=0.13"
 
   backend "s3" {
     endpoint   = "storage.yandexcloud.net"
@@ -42,20 +46,25 @@ resource "yandex_vpc_subnet" "develop" {
   v4_cidr_blocks = ["10.0.1.0/24"]
 }
 
+resource "yandex_vpc_security_group" "security_group" {
+  name        = "Security group develop"
+  description = "Description for security group develop"
+  network_id  = yandex_vpc_network.develop.id
+}
+
 module "test-vm" {
-  source          = "git::https://github.com/udjin10/yandex_compute_instance.git?ref=main"
-  env_name        = "develop"
-  network_id      = yandex_vpc_network.develop.id
-  subnet_zones    = ["ru-central1-a"]
-  subnet_ids      = [ yandex_vpc_subnet.develop.id ]
-  instance_name   = "web"
-  instance_count  = 2
-  image_family    = "ubuntu-2004-lts"
-  public_ip       = true
-  
+  source             = "./yandex_compute_instance"
+  env_name           = "develop"
+  network_id         = yandex_vpc_network.develop.id
+  subnet_zones       = ["ru-central1-a"]
+  subnet_ids         = [ yandex_vpc_subnet.develop.id ]
+  instance_name      = "web"
+  instance_count     = 2
+  image_family       = "ubuntu-2004-lts"
+  security_group_ids = [yandex_vpc_security_group.security_group.id]
+
   metadata = {
-      user-data          = data.template_file.cloudinit.rendered #Для демонстрации №3
-      serial-port-enable = 1
+      user-data   = data.template_file.cloudinit.rendered #Для демонстрации №3
   }
 
 }
@@ -64,4 +73,3 @@ module "test-vm" {
 data "template_file" "cloudinit" {
  template = file("./cloud-init.yml")
 }
-
