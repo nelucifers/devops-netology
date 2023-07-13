@@ -9,6 +9,7 @@ Playbook предназначен для ОС CentOS. Имеет два Play, о
 - _clickhouse_version_ (строка)
 - _clickhouse_packages_ (список)
 - _vector_version_ (строка)
+- _vector_data_dir_ (строка)
 
 ### Теги
 
