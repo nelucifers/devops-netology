@@ -96,7 +96,7 @@
     - name: Create directory on /var/lib
       become: true
       ansible.builtin.file:
-        path: /var/lib/vector
+        path: {{ vector_data_dir }}
         state: directory
         owner: vector
         group: vector
