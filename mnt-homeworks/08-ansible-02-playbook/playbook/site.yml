@@ -84,16 +84,15 @@
         state: directory
         owner: vector
         group: vector
-        mode: '644'
+        mode: '755'
     - name: Copy congif file
       become: true
-      ansible.builtin.copy:
-        remote_src: true
-        src: /tmp/vector/config/vector.toml
+      ansible.builtin.template:
+        src: templates/vector.toml.j2
         dest: /etc/vector/vector.toml
         owner: vector
         group: vector
-        mode: '644'
+        mode: '755'
     - name: Create directory on /var/lib
       become: true
       ansible.builtin.file:
@@ -101,7 +100,7 @@
         state: directory
         owner: vector
         group: vector
-        mode: '644'
+        mode: '755'
     - name: Copy service file
       become: true
       ansible.builtin.copy:
